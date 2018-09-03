@@ -1,0 +1,125 @@
+<html>
+ <head>
+ <title>Login</title>
+ <link rel="stylesheet" href="login.css">
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src = "login.js" type="text/javascript"></script>
+ </head>
+ <body>
+ <div class="login-box">
+ <form>
+ <h1>Login</h1>
+ <div class="textbox">
+ <i class="fa fa-envelope" aria-hidden="true"></i>
+ <input type="text" placeholder="Email Id" name="" value="">
+ </div>
+ <div class="textbox">
+ <i class="fa fa-lock" aria-hidden="true"></i>
+ <input type="password" placeholder="Password" name="" value="">
+ </div>
+ <a href="notes.html">
+ <input class="btn" type="button" name="" value="Sign In">
+ </a><br><br>
+ Create an Account?<a href="signup.html">Click Here!</a>
+ </form>
+ </div>
+ </body>
+</html>
+Code for Sign-Up page:
+<html>
+ <head>
+ <title>Sign Up</title>
+ <link rel="stylesheet" href="login.css">
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src = "login.js" type="text/javascript"></script>
+ </head>
+ <body>
+ <div class="login-box">
+ <form>
+ <h1>Sign Up</h1>
+ <div class="textbox">
+ <i class="fa fa-user" aria-hidden="true"></i>
+ <input type="text" placeholder="First Name" name="" value="">
+ </div>
+ <div class="textbox">
+ <i class="fa fa-user" aria-hidden="true"></i>
+ <input type="text" placeholder="Last Name" name="" value="">
+ </div>
+ <div class="textbox">
+ <i class="fa fa-envelope" aria-hidden="true"></i>
+ <input type="text" placeholder="Email id" name="" value="">
+ </div>
+ <div class="textbox">
+ <i class="fa fa-phone" aria-hidden="true"></i>
+ <input type="text" placeholder="Phone Number" name="" value="">
+ </div>
+ <div class="textbox">
+ <i class="fa fa-lock" aria-hidden="true"></i>
+ <input type="password" placeholder="Password" name="" value="">
+ </div>
+ <a href="dairy.html">
+ <input class="btn" type="button" name="" value="Sign Up">
+ </a>
+ </form>
+ </div>
+ </body>
+</html>
+Code for Personal dairy:
+<html>
+<head>
+<title>DAIRY</title>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src = "login.js" type="text/javascript"></script>
+</head>
+<body style="background-color:pink;">
+<pre> </pre>
+<pre> </pre>
+<form><h1 style="font-family:verdana;">
+date: <input type = "integers" name = "integers" />
+      <br>
+      text: <input type = "text" name = "last_name" />
+      <br>
+      <input type = "submit" name = "submit" value = "Submit" />
+      </br>
+	  </br>
+        
+   
+<pre><font color="black"><center> Description:<input type="text" name="dairy"
+size="500","height="5000",width="5000"></center></font></pre></h1>
+<br>
+</center>
+</form>
+</body>
+</html>
+Code for server connection:
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const routes = require('./routes/routes');
+mongoose.Promise = global.Promise;
+const app = express();
+mongoose.connect('mongodb://localhost:27017/user',{ useNewUrlParser: true });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+routes(app);
+app.use((err,req,res,next) => {
+res.status(422).send({ status: false, error: err.message });
+});
+const ip = '127.0.0.1';
+app.listen(3000,ip, () => {
+console.log('Server listening at '+ip+':3000');
+});
+Code for Login and Sign-Up:
+const user = require('../controller/user');
+const path = require('path');
+module.exports = (app) => {
+app.get('/', (req,res) => {
+res.sendFile(path.join(__dirname+'/../login.html'));
+});
+app.post('/login',user.login);
+app.get('/signup', (req,res) => {
+res.sendFile(path.join(__dirname+'/../signup.html'));
+});
+app.post('/signup',user.signup);
+}

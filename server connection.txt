@@ -1,0 +1,32 @@
+Code for server connection:
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const routes = require('./routes/routes');
+mongoose.Promise = global.Promise;
+const app = express();
+mongoose.connect('mongodb://localhost:27017/user',{ useNewUrlParser: true });
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+routes(app);
+app.use((err,req,res,next) => {
+res.status(422).send({ status: false, error: err.message });
+});
+const ip = '127.0.0.1';
+app.listen(3000,ip, () => {
+console.log('Server listening at '+ip+':3000');
+});
+Code for Login and Sign-Up:
+const user = require('../controller/user');
+const path = require('path');
+module.exports = (app) => {
+app.get('/', (req,res) => {
+res.sendFile(path.join(__dirname+'/../login.html'));
+});
+app.post('/login',user.login);
+app.get('/signup', (req,res) => {
+res.sendFile(path.join(__dirname+'/../signup.html'));
+});
+app.post('/signup',user.signup);
+}
